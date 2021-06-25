@@ -1,0 +1,44 @@
+name: "tagged-release"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Configure git for private modules
+        env:
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: git config --global url."https://douglarek:${TOKEN}@github.com".insteadOf "https://github.com"
+      - name: Build package
+        run: |
+          curl -LO https://gist.githubusercontent.com/douglarek/202b9c7e85e7ba9dab797101b987be66/raw/fc2069483423ecc3739f4082c950a347f871e168/imports_common.go.patch
+          patch -p0 < imports_common.go.patch
+          git diff
+          make mage
+          cd filebeat
+          export PATH=$(go env GOPATH)/bin:$PATH
+          mage package
+          ls -la build/*
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: ${{ steps.vars.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            filebeat/build/distributions/*
