@@ -22,12 +22,13 @@ jobs:
         run: git config --global url."https://douglarek:${TOKEN}@github.com".insteadOf "https://github.com"
       - name: Build package
         run: |
-          curl -LO https://gist.githubusercontent.com/douglarek/202b9c7e85e7ba9dab797101b987be66/raw/fc2069483423ecc3739f4082c950a347f871e168/imports_common.go.patch
+          curl -LO https://gist.githubusercontent.com/douglarek/202b9c7e85e7ba9dab797101b987be66/raw/4fb94a96aec433858e0d8519c6f5496fd7a41e72/imports_common.go.patch
           patch -p0 < imports_common.go.patch
           git diff
           make mage
           cd filebeat
           export PATH=$(go env GOPATH)/bin:$PATH
+          go env -w GOPRIVATE="github.com/douglarek/beats-processors"
           mage package
           ls -la build/*
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
