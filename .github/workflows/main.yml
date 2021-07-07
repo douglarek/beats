@@ -53,7 +53,7 @@ jobs:
         run: docker load < filebeat/build/distributions/filebeat-*.docker.tar.gz
       - id: get-tag
         run: |
-          tag=$(echo ${{ steps.vars.outputs.tag }} | cut -d- -f1)
+          tag=$(echo ${{ steps.vars.outputs.tag }} | cut -d- -f1 | cut -dv -f2)
           echo "::set-output name=tag::$tag"
       - name: Push Image to multiple registries
         uses: akhilerm/tag-push-action@v1.0.0
