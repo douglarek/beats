@@ -42,7 +42,6 @@ jobs:
           prerelease: false
           files: |
             filebeat/build/distributions/*
-            metricbeat/build/distributions/*
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -60,4 +59,4 @@ jobs:
         with:
           src: docker.elastic.co/beats/filebeat-oss:${{ steps.get-tag.outputs.tag }}
           dst: |
-            ghcr.io/${{ github.repository_owner }}/filebeat-oss:${{ steps.get-tag.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/filebeat-oss:${{ steps.vars.outputs.tag }}
