@@ -30,9 +30,6 @@ jobs:
           make mage
           cd filebeat
           mage package
-          cd ..
-          cd metricbeat
-          mage package
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
@@ -46,3 +43,21 @@ jobs:
           files: |
             filebeat/build/distributions/*
             metricbeat/build/distributions/*
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Load docker image
+        run: docker load < filebeat/build/distributions/filebeat-*.docker.tar.gz
+      - id: get-tag
+        run: |
+          tag=$(echo ${{ steps.vars.outputs.tag }} | cut -d- -f1)
+          echo "::set-output name=tag::$tag"
+      - name: Push Image to multiple registries
+        uses: akhilerm/tag-push-action@v1.0.0
+        with:
+          src: docker.elastic.co/beats/filebeat-oss:${{ steps.get-tag.outputs.tag }}
+          dst: |
+            ghcr.io/${{ github.repository_owner }}/filebeat-oss:${{ steps.get-tag.outputs.tag }}
