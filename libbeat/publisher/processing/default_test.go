@@ -173,7 +173,7 @@ func TestProcessorsConfigs(t *testing.T) {
 			event: `{"value": "abc"}`,
 			want:  common.MapStr{"value": "abc", "custom": "value"},
 		},
-		/*"with beat default fields": {
+		"with beat default fields": {
 			factory: MakeDefaultBeatSupport(true),
 			global:  `{fields: {global: a, agent.foo: bar}, fields_under_root: true, tags: [tag]}`,
 			event:   `{"value": "abc"}`,
@@ -222,7 +222,7 @@ func TestProcessorsConfigs(t *testing.T) {
 				"global": "a",
 				"tags":   []string{"tag"},
 			},
-		},*/
+		},
 		"with observer default fields": {
 			factory: MakeDefaultObserverSupport(false),
 			global:  `{fields: {global: a, observer.foo: bar}, fields_under_root: true, tags: [tag]}`,
