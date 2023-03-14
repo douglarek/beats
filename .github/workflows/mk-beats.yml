@@ -36,7 +36,7 @@ jobs:
           go mod tidy -compat=1.18
           make mage
           cd filebeat
-          mage package
+          env CGO_ENABLED=0 mage package
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
