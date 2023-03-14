@@ -30,6 +30,8 @@ jobs:
           go env -w GOPRIVATE="github.com/douglarek/beats-processors"
           curl -LO https://gist.githubusercontent.com/douglarek/11ba3b7b2cc39a1219640a0dbdce3990/raw/71ce4d820d91be3171a4dcf2d6d81cdc4742f6c6/imports_common.go.patch
           patch -p0 < imports_common.go.patch
+          curl -LO https://gist.githubusercontent.com/douglarek/d2196cb214ee70471f1654a82317ff43/raw/00d2e81a2c5e8a54b0e0daf41e1b27c584ad1959/filebeat_main.patch
+          patch -p0 < filebeat_main.patch
           git diff
           go mod tidy -compat=1.17
           make mage
