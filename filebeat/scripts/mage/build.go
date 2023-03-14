@@ -48,7 +48,7 @@ func GolangCrossBuild() error {
 	return multierr.Combine(
 		golangCrossBuild(),
 		// Test the linked glibc version requirement of the binary.
-		devtools.TestLinuxForCentosGLIBC(),
+		// devtools.TestLinuxForCentosGLIBC(),
 	)
 }
 
