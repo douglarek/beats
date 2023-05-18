@@ -1,0 +1,13 @@
+--- libbeat/cmd/instance/imports_common.go	2023-05-18 15:53:39.640385633 +0800
++++ imports_common.go	2023-05-18 15:53:36.780356784 +0800
+@@ -18,6 +18,10 @@
+ package instance
+ 
+ import (
++	_ "github.com/douglarek/beats-processors/addguid"
++	_ "github.com/douglarek/beats-processors/filewatch"
++	_ "github.com/douglarek/beats-processors/logfilter"
++	_ "github.com/douglarek/beats-processors/topicmonitor"
+ 	_ "github.com/elastic/beats/v7/libbeat/autodiscover/appenders/config" // Register autodiscover appenders
+ 	_ "github.com/elastic/beats/v7/libbeat/autodiscover/providers/jolokia"
+ 	_ "github.com/elastic/beats/v7/libbeat/monitoring/report/elasticsearch" // Register default monitoring reporting
